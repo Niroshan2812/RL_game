@@ -12,7 +12,7 @@ class Direction(Enum):
     UP = 3
     DOWN = 4
 
-Point = namedtuple('Point', 'x,y')
+Point = namedtuple('Point', 'x, y')
 
 #FOR RGB colors 
 WHITE = (255,255,255)
@@ -31,7 +31,7 @@ class SnakeGame:
 
         #game display envirement 
         self.display =  pygame.display.set_mode((self.w, self.h))
-        pygame.display.set_caption("Snake")
+        pygame.display.set_caption('Snake')
         self.clock = pygame.time.Clock()
         #print ("initial")
 
@@ -47,8 +47,8 @@ class SnakeGame:
         self._place_food()
 
     def _place_food(self):
-        x = random.randint(0, (self.w-BLOCK_SIZE)// BLOCK_SIZE)* BLOCK_SIZE
-        y = random.randint(0, (self.h-BLOCK_SIZE)//BLOCK_SIZE)* BLOCK_SIZE
+        x = random.randint(0, (self.w-BLOCK_SIZE)// BLOCK_SIZE)*BLOCK_SIZE
+        y = random.randint(0, (self.h-BLOCK_SIZE)//BLOCK_SIZE)*BLOCK_SIZE
         self.food = Point(x,y)
         if self.food in self.snake:
             self._place_food()
@@ -60,19 +60,19 @@ class SnakeGame:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and self.direction != Direction.RIGHT:
                     self.direction = Direction.LEFT
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT and self.direction != Direction.LEFT:
                     self.direction = Direction.RIGHT
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP and self.direction != Direction.DOWN:
                     self.direction = Direction.UP
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN and self.direction !=  Direction.UP:
                     self.direction = Direction.DOWN
         
         
         # for update head 
-        self._move = (self.direction)
-        self.snake.insert(0,self.head)
+        self._move(self.direction)
+        self.snake.insert(0, self.head)
 
         #check if game over
         game_over = False
@@ -90,6 +90,9 @@ class SnakeGame:
 
         # update UI and clock 
         self._update_ui()
+        self.clock.tick(SPEED)
+        
+        return False, self.score
 
         
     
