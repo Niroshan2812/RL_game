@@ -19,7 +19,53 @@ class Agent:
 
 
     def get_state(self, snake_game):
-        pass
+        head = snake_game.snake[0]
+        point_l = Point(head.x - 20, head.y)
+        point_r = Point(head.x + 20, head.y)
+        point_u = Point (head.x, head.u -20)
+        point_d = Point (head.x, head.u +20)
+
+        dir_l = snake_game.direction == Direction.LEFT
+        dir_r = snake_game.direction == Direction.RIGHT
+        dir_u = snake_game.direction == Direction.UP
+        dir_d = snake_game.direction == Direction.DOWN
+
+        state = [
+            # danger straight
+            (dir_r and snake_game.is_collision(point_r)) or
+            (dir_l and snake_game.is_collision(point_l)) or
+            (dir_u and snake_game.is_collision(point_u)) or
+            (dir_d and snake_game.is_collision(point_d)),
+
+            # danger right
+            (dir_u and snake_game.is_collision(point_r)) or
+            (dir_d and snake_game.is_collision(point_l)) or
+            (dir_l and snake_game.is_collision(point_u)) or
+            (dir_r and snake_game.is_collision(point_d)),
+
+            # danger left
+            (dir_d and snake_game.is_collision(point_r)) or
+            (dir_u and snake_game.is_collision(point_l)) or
+            (dir_r and snake_game.is_collision(point_u)) or
+            (dir_l and snake_game.is_collision(point_d)),
+
+            # move direction 
+            dir_l,
+            dir_r,
+            dir_u, 
+            dir_d,
+
+            # food location
+            # if game food is smaller than game head then {x}
+            snake_game.food.x < snake_game.head.x,  # {x} => food left
+            snake_game.food.x > snake_game.head.x,  # {x} => food right
+            snake_game.food.y < snake_game.head.y,  # {x} => food up
+            snake_game.food.y > snake_game.head.y   # {x} => food down
+        ]
+        return np.array(state,dtype = int)
+    
+
+
     def remember(self, state,action,reward,next_stage, done):
         pass
     def train_long_memory(self):
