@@ -23,5 +23,33 @@ class Linner_QNet(nn.Module):
         file_name = os.path.join(model_folderpath, file_name)
         torch.save(self.state_dict(),file_name)
 
+
+
+class Qtrainner:
+    def __init__(self, model, lr, gamma):
+        self.lr = lr
+        self.gamma = gamma
+        self.model = model
+        self.optimizer = optim.Adam(model.parameters(), lr = self.lr)
+        self.criterion  = nn.MSELoss()
+
+        
+    def train_step (self, state ,action, reward, next_stage, done ):
+        state = torch.tensor(state, dtype=torch.float)
+        next_stage = torch.tensor(next_stage, dtype=torch.float)
+        action = torch.tensor(action, dtype=torch.long)
+        reward = torch.tensor(reward, dtype=torch.float)
+
+        #handle mulltiple sizes
+
+        if len(state.shape) ==1:
+            state  = torch.unsqueeze(state, 0)
+            reward = torch.unsqueeze(reward,0)
+            action = torch.unsqueeze(action,0)
+            reward = torch.unsqueeze(reward, 0)
+            done = (done, )
+
+
+
     
                    
