@@ -135,7 +135,7 @@ class SnakeGame:
         #use numpy for array
         if np.array_equal(action, [1,0,0]):
             new_dir = clock_wise[idx]
-        if np.array_equal(action, [0,1,0]):
+        elif np.array_equal(action, [0,1,0]):
             #Right turn
             next_idx = (idx + 1)% 4
             new_dir = clock_wise[next_idx]
