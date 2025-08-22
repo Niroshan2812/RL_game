@@ -23,11 +23,11 @@ class Agent:
 
 
     def get_state(self, snake_game):
-        head = snake_game.snake[0]
+        head = snake_game.head
         point_l = Point(head.x - 20, head.y)
         point_r = Point(head.x + 20, head.y)
-        point_u = Point (head.x, head.u -20)
-        point_d = Point (head.x, head.u +20)
+        point_u = Point(head.x, head.y - 20)
+        point_d = Point(head.x, head.y + 20)
 
         dir_l = snake_game.direction == Direction.LEFT
         dir_r = snake_game.direction == Direction.RIGHT
@@ -75,8 +75,8 @@ class Agent:
 
     def train_long_memory(self):
         #Check how many sample in memory
-        if len(self.memory) < BATCH_SIZE:
-            mini_sample = random.sample(self.memory, BATCH_SIZE) # return list of tuples 
+        if len(self.memory) > BATCH_SIZE:
+            mini_sample = random.sample(self.memory, min(BATCH_SIZE, len(self.memory))) # return list of tuples 
         else:
             mini_sample = self.memory
         
@@ -90,7 +90,7 @@ class Agent:
 
     def get_action(self,state):
         # random move
-        self.epsilon = 80 = self.n_games
+        self.epsilon = 80 - self.n_games
         final_move= [0,0,0]
         if random.randint(0,200)<self.epsilon:
             move = random.randint(0,2)
@@ -110,7 +110,7 @@ def train():
     total_score = 0
     record = 0
     agent = Agent()
-    snake_game = SnakeGame
+    snake_game = SnakeGame()
     while True:
         #get old state 
         state_old = agent.get_state(snake_game)
@@ -131,8 +131,8 @@ def train():
         if done:
             # train long memory and plot result
             snake_game.reset()
-            agent.n_game +=1
-            agent.train_long_memory
+            agent.n_games +=1
+            agent.train_long_memory()
 
             if score > record:
                 record = score
