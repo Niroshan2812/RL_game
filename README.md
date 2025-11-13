@@ -18,10 +18,15 @@ The agent learns to play Snake by trial and error, improving over time by maximi
 ## 📂 Project Structure
 .
 ├── snake_game.py # Snake game environment (Pygame)
+
 ├── agent.py # RL agent (Deep Q-Learning logic + training loop)
+
 ├── model.py # Neural network model & trainer
+
 ├── helper.py # Plotting functions
+
 ├── model/ # Saved trained models
+
 └── README.md # Project documentation
 
 
